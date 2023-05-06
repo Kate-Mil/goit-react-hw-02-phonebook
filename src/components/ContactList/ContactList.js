@@ -1,15 +1,21 @@
 import css from './ContactList.module.css';
 import PropTypes from 'prop-types';
+import ContactItem from '../ContactItem/ContactItem';
 
-export default function ContactList({ name, number }) {
+export default function ContactList({ visibleContacts }) {
   return (
-    <li className={css.contact__item}>
-      {name}: {number}
-    </li>
+    <ul className={css.contact__list}>
+      {visibleContacts.map(({ id, name, number }) => (
+        <ContactItem key={id} name={name} number={number} />
+      ))}
+    </ul>
   );
 }
 
 ContactList.propTypes = {
-  name: PropTypes.string.isRequired,
-  number: PropTypes.string.isRequired,
+  visibleContacts: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.string.isRequired,
+    })
+  ).isRequired,
 };
