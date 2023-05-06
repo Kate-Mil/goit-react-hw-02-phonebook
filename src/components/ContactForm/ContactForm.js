@@ -1,11 +1,11 @@
 import { Component } from 'react';
+import PropTypes from 'prop-types';
 import css from './ContactForm.module.css';
 
 class ContactForm extends Component {
   state = { name: '', number: '' };
 
   hendlChange = e => {
-    console.log(e.currentTarget.name);
     const { name, value } = e.currentTarget;
     this.setState({ [name]: value });
   };
@@ -59,3 +59,7 @@ class ContactForm extends Component {
 }
 
 export default ContactForm;
+
+ContactForm.propTypes = {
+  onSubmit: PropTypes.func.isRequired,
+};
