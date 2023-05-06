@@ -1,12 +1,10 @@
 import React, { Component } from 'react';
 import { nanoid } from 'nanoid';
-import ContactList from './ContactForm/ContactList';
+import ContactList from './ContactList/ContactList';
 import ContactForm from './ContactForm/ContactForm';
 class App extends Component {
   state = {
     contacts: [],
-    // name: '',
-    // number: '',
   };
   formSubmitHandler = data => {
     const preCheck = this.state.contacts.some(

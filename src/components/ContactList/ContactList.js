@@ -1,4 +1,4 @@
-import css from './ContactForm.module.css';
+import css from './ContactList.module.css';
 import PropTypes from 'prop-types';
 
 export default function ContactList({ name, number }) {
