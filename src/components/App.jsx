@@ -26,16 +26,29 @@ class App extends Component {
     }
   };
 
+  changeFilter = e => {
+    this.setState({ filter: e.currentTarget.value });
+  };
+
+  getVisibleContacts = () => {
+    const { contacts, filter } = this.state;
+    const normilizedFilter = filter.toLowerCase();
+    return contacts.filter(contact =>
+      contact.name.toLowerCase().includes(normilizedFilter)
+    );
+  };
+
   render() {
-    const { contacts } = this.state;
+    const { filter } = this.state;
+    const visibleContacts = this.getVisibleContacts();
     return (
       <div style={{ paddingLeft: 15 }}>
         <h1 className="contact_title">Phonebook</h1>
         <ContactForm onSubmit={this.formSubmitHandler} />
         <h2 className="contact__title">Contacts</h2>
-        <Filer value={this.filter} />
+        <Filer value={filter} onChange={this.changeFilter} />
         <ul className="contact__list">
-          {contacts.map(({ id, name, number }) => (
+          {visibleContacts.map(({ id, name, number }) => (
             <ContactList key={id} name={name} number={number} />
           ))}
         </ul>
