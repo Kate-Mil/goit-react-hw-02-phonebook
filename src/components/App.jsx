@@ -3,27 +3,37 @@ import { nanoid } from 'nanoid';
 import ContactList from './ContactList/ContactList';
 import ContactForm from './ContactForm/ContactForm';
 import Filer from './Filter/Filter';
+
 class App extends Component {
   state = {
     contacts: [],
     filter: '',
   };
+
   formSubmitHandler = data => {
     const preCheck = this.state.contacts.some(
-      contact => (contact.name === data.name) & (contact.number === data.number)
+      ({ name, number }) =>
+        name.toLowerCase() === data.name.toLowerCase() || number === data.number
     );
+
     if (preCheck) {
-      return alert(`Sorry, contact ${data.name} is already exists`);
-    } else {
-      const contact = {
-        id: nanoid(),
-        name: data.name,
-        number: data.number,
-      };
-      this.setState(({ contacts }) => ({
-        contacts: [contact, ...contacts],
-      }));
+      alert(`Sorry, contact ${data.name} is already exists`);
+      return;
     }
+    const contact = {
+      id: nanoid(),
+      ...data,
+    };
+
+    this.setState(({ contacts }) => ({
+      contacts: [contact, ...contacts],
+    }));
+  };
+
+  deleteContact = contactId => {
+    this.setState(prevState => ({
+      contacts: prevState.contacts.filter(contact => contact.id !== contactId),
+    }));
   };
 
   changeFilter = e => {
@@ -38,24 +48,21 @@ class App extends Component {
     );
   };
 
-  deleteContact = contactId => {
-    this.setState(prevState => ({
-      contacts: prevState.contacts.filter(contact => contact.id !== contactId),
-    }));
-  };
-
   render() {
     const { filter } = this.state;
+    const visibleContacts = this.getVisibleContacts();
     return (
       <div style={{ paddingLeft: 15 }}>
         <h1 className="contact_title">Phonebook</h1>
         <ContactForm onSubmit={this.formSubmitHandler} />
         <h2 className="contact__title">Contacts</h2>
         <Filer value={filter} onChange={this.changeFilter} />
-        <ContactList
-          visibleContacts={this.getVisibleContacts()}
-          onDeleteContact={this.deleteContact}
-        />
+        {visibleContacts.length > 0 && (
+          <ContactList
+            visibleContacts={visibleContacts}
+            onDeleteContact={this.deleteContact}
+          />
+        )}
       </div>
     );
   }
